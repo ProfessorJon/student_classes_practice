@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
 
@@ -22,5 +25,63 @@ public class Test {
         Print how many students are MathStudent with message -> "Math students = {numberOfMathStudents}"
         Print how many students are ScienceStudent with message -> "Science students = {numberOfScienceStudents}"
          */
+
+        Scanner input = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+        int totalMathStudents = 0;
+
+        do {
+            System.out.println(UserQuestions.askToJoin);
+            String askToJoin = input.nextLine();
+            if (!askToJoin.equalsIgnoreCase("Y")) continue;
+
+            System.out.println(UserQuestions.askFirstName);
+            String firstName = input.nextLine();
+
+            System.out.println(UserQuestions.askLastName);
+            String lastName = input.nextLine();
+
+            System.out.println(UserQuestions.askAge);
+            int age = input.nextInt();
+            input.nextLine();
+
+            try {
+                Permission.checkAge(age);
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+            System.out.println(UserQuestions.askGender);
+            String gender = input.nextLine();
+
+            System.out.println(UserQuestions.askClassName);
+            String className = input.nextLine();
+
+            try {
+                Permission.checkClassName(className);
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+            if (className.equalsIgnoreCase("math")) {
+                students.add(new MathStudent(firstName, lastName, age, gender, className));
+                totalMathStudents++;
+            }
+            else students.add(new ScienceStudent(firstName, lastName, age, gender, className));
+
+            System.out.println("Congratulations! You are registered for " + className + " class.");
+
+        } while (students.size() < 3);
+
+        students.forEach(System.out::println);
+
+        System.out.println("Math students = " + totalMathStudents);
+        System.out.println("Science students = " + (students.size() - totalMathStudents));
+
+//        for (Student s : students) {
+//            System.out.println(s.toString());
+//        }
     }
 }
